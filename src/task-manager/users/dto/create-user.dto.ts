@@ -1,5 +1,5 @@
 import {  IsString, MaxLength,  } from 'class-validator';
-export class CreateUseDto {
+export class CreateUserDto {
 
     @IsString()
     @MaxLength(50)
@@ -7,7 +7,7 @@ export class CreateUseDto {
 
     @IsString()
     @MaxLength(50)
-    emai: string;
+    email: string;
 
 }
 
