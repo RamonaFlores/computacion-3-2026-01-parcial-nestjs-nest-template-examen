@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TaskManagerModule } from './task-manager/task-manager.module';
 
 type SupportedDbTypes = 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mongodb' | 'oracle';
 @Module({
@@ -22,7 +23,8 @@ type SupportedDbTypes = 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mongodb' 
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
                 synchronize: configService.get<boolean>('DB_SYNCHRONIZE') ?? false,
             }),
-        })
+        }),
+        TaskManagerModule
     ],
     controllers: [AppController],
     providers: [AppService],
