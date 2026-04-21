@@ -21,4 +21,11 @@ export class Task{
 
     @OneToMany ( () => TaskAssignment, (taskassignment) => taskassignment.user)
     taskAssignments: TaskAssignment[];
+
+    @ManyToOne ( () => Task , (task) => task.tasks, {nullable: false})
+    @JoinColumn({ name: 'parent_task_id'})
+    parentTask: Task
+
+    @OneToMany ( () => Task, (task) => task.parentTask )
+    tasks: Task[]
 }
