@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn , OneToMany} from 'typeorm';
 import { TaskAssignment } from './task_assignment.entity';
+import {Project} from './project.entity';
 export enum Status {
     IN_PROGRESS = 1,
     REVIEW = 2,
@@ -28,4 +29,8 @@ export class Task{
 
     @OneToMany ( () => Task, (task) => task.parentTask )
     tasks: Task[]
+
+    @ManyToOne ( () => Project , (project) => project.tasks, {nullable: false})
+    @JoinColumn({ name: 'projet_id'})
+    project: Project
 }

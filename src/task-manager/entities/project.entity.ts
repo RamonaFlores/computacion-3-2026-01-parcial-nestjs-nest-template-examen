@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {Task} from './task.entity';
 
 
 @Entity('projects') 
@@ -14,4 +15,7 @@ export class Project {
 
     @Column({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
+
+    @OneToMany ( () => Task, (taskassignment) => taskassignment.project)
+    tasks: Task[];
 }
