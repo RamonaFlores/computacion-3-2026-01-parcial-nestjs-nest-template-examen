@@ -15,53 +15,30 @@ export class TaskService {
     ){}
 
 
-    async create(CreateTaskDto: CreateTaskDto): Promise<Task> {
+    async create(createTaskDto: CreateTaskDto): Promise<Task> {
+        const project = await this.projectRepository.findOneBy({ id: createTaskDto.projectId });
 
-        const project = await this.projectRepository.findOneBy({id: CreateTaskDto.projectId});
-
-        if(!project) {
-            throw new NotFoundException(`Session with id ${CreateTaskDto.projectId} not found`)
+        if (!project) {
+            throw new NotFoundException(`Project with id ${createTaskDto.projectId} not found`);
         }
-        if (CreateTaskDto.parentTaskId != null){
 
-            
-            const parentTask = await this.taskRepository.findOneBy({id: CreateTaskDto.parentTaskId})
-            if(!parentTask) {
-                throw new NotFoundException(`Parent task with id ${CreateTaskDto.parentTaskId} not found`)
-                
+        let parentTask: Task | null = null;
+        if (createTaskDto.parentTaskId != null) {
+            parentTask = await this.taskRepository.findOneBy({ id: createTaskDto.parentTaskId });
+            if (!parentTask) {
+                throw new NotFoundException(`Parent task with id ${createTaskDto.parentTaskId} not found`);
+            }
         }
 
         const task = this.taskRepository.create({
-            title: CreateTaskDto.title,
-            description: CreateTaskDto.description,
-            status: CreateTaskDto.status,
+            title: createTaskDto.title,
+            description: createTaskDto.description,
+            status: createTaskDto.status,
+            project,
+            parentTask: parentTask ?? undefined,
+        });
 
-            
-
-        })
-        }
-        @IsString()
-    @IsNotEmpty()
-    @MaxLength(120)
-    title: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @MaxLength(1000)
-    description: string;
-
-    @IsInt()
-    @Min(1)
-    @Max(3)
-    status: number;
-
-    @IsInt()
-    @Min(1)
-    @IsOptional()
-    parentTaskId?: number;
-
-    @IsInt()
-    @Min(1)
-    @IsOptional()
-    projectId: number;
+        return this.taskRepository.save(task);
     }
+}
+    
